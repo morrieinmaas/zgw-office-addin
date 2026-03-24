@@ -10,6 +10,32 @@ on:
   pull_request:
 
 jobs:
+  llm-relay:
+    name: LLM Relay (lint + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: llm-relay
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@0c5e2b8115b80b4c7c5ddf6ffdd634974642d182 # v5.4.1
+
+      - name: Install dependencies
+        run: uv sync --frozen --extra dev
+
+      - name: Lint
+        run: uv run ruff check src
+
+      - name: Format check
+        run: uv run ruff format --check src
+
+      - name: Run tests
+        run: uv run pytest tests -v
+
   test:
     name: Run Tests
     runs-on: ubuntu-latest
@@ -48,7 +74,7 @@ jobs:
 
       - name: Upload backend test coverage report to Codecov
         if: ${{ github.event_name != 'merge_group' }}
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        uses: codecov/codecov-action@1af58845a975a7985b0beb0cbe6fbbb71a41dbad # v5.5.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: backendunittests
@@ -56,7 +82,7 @@ jobs:
 
       - name: Upload frontend test coverage report to Codecov
         if: ${{ github.event_name != 'merge_group' }}
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        uses: codecov/codecov-action@1af58845a975a7985b0beb0cbe6fbbb71a41dbad # v5.5.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: frontendunittests
@@ -65,6 +91,7 @@ jobs:
       - name: Comment PR with test results
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         with:
           script: |
             const fs = require('fs');
