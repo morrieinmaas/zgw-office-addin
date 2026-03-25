@@ -5,3 +5,16 @@ export type DocumentInfo = {
   inhoud?: string;
   attachmentOfficeId?: string;
 };
+
+export type LlmRelayData = {
+  beschrijving: string;
+};
+
+export type LlmRelayResponse = {
+  success: boolean;
+  data: LlmRelayData | null;
+  model_used: string | null;
+  error: string | null;
+};
+
+

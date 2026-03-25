@@ -18,6 +18,7 @@ export function useOutlook() {
       name: `E-mail: ${email.subject || "(geen onderwerp)"}.eml`,
       contentType: "message/rfc822",
       isInline: false,
+      contentId: "",
       size: 0,
       attachmentType: Office.MailboxEnums.AttachmentType.Item,
     };

@@ -85,8 +85,8 @@ Returns `{"status": "ok", "service": "llm-relay"}`.
 
 ### Swagger / OpenAPI docs
 
-- Swagger UI: `http://localhost:8080/docs`
-- ReDoc: `http://localhost:8080/redoc`
+- Swagger UI: `http://localhost:1414/docs`
+- ReDoc: `http://localhost:1414/redoc`
 
 ## Running
 
@@ -103,7 +103,7 @@ just relay-logs        # tail logs
 
 ```bash
 just relay-install     # install dependencies
-just relay-dev         # start with hot reload on :8080
+just relay-dev         # start with hot reload on :1414
 ```
 
 ### Testing

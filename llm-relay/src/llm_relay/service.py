@@ -37,6 +37,8 @@ def _build_text_messages(
         context_hint = "This is an email message.\n\n"
     elif attachment_type == "file":
         context_hint = "This is a file attachment.\n\n"
+    elif attachment_type:
+        context_hint = "This is a single file. \n\n"
 
     user_message = f"{prompt}\n\n---\n{context_hint}DOCUMENT:\n{text_content}"
 

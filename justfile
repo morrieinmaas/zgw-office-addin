@@ -39,7 +39,7 @@ relay-logs:
 
 # Run LLM relay locally (without Docker)
 relay-dev:
-    cd llm-relay && uv run uvicorn llm_relay.main:app --host 0.0.0.0 --port 8080 --reload
+    cd llm-relay && uv run uvicorn llm_relay.main:app --host 0.0.0.0 --port 1414 --reload
 
 # Install LLM relay dependencies locally
 relay-install:
@@ -58,12 +58,12 @@ relay-test-request PAYLOAD="":
     #!/usr/bin/env bash
     set -euo pipefail
     if [ -n "{{ PAYLOAD }}" ]; then
-        curl -s -X POST http://localhost:8080/api/v1/generate \
+        curl -s -X POST http://localhost:1414/api/v1/generate \
           -H "Content-Type: application/json" \
           -d @"{{ PAYLOAD }}" | python3 -m json.tool
     else
         CONTENT=$(echo "This is a test document about climate change policies in the Netherlands. The government has committed to reducing greenhouse gas emissions by 49% by 2030." | base64 | tr -d '\n')
-        curl -s -X POST http://localhost:8080/api/v1/generate \
+        curl -s -X POST http://localhost:1414/api/v1/generate \
           -H "Content-Type: application/json" \
           -d "{\"content\": \"${CONTENT}\", \"prompt\": \"Summarize this document and extract key topics.\", \"output_schema\": {\"summary\": \"str\", \"topics\": \"list[str]\", \"language\": \"str\"}}" | python3 -m json.tool
     fi

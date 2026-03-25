@@ -9,6 +9,7 @@ import { envServerSchema } from "../src/envSchema";
 
 export class HttpService {
   private readonly baseUrl = envServerSchema.API_BASE_URL;
+  private readonly aiRelayUrl = envServerSchema.AI_RELAY_URL;
 
   public async POST<T>(
     url: string,
@@ -20,6 +21,20 @@ export class HttpService {
       throw new Error("User info is required to add document to zaak");
     }
     return this.request<T>("POST", url, { body, headers }, userInfo);
+  }
+
+  public async POSTAI<T>(
+    body: BodyInit,
+  ): Promise<T> {
+    const response = await fetch(`${this.aiRelayUrl}/api/v1/generate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    });
+    const aiGeneratedFields = await response.json();
+    return aiGeneratedFields as T;
   }
 
   public async GET<T>(

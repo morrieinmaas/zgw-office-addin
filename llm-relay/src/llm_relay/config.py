@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     openrouter_api_key: str = ""
     default_model: str = "mistralai/mistral-small-3.2-24b-instruct-2506"
     app_name: str = "llm-relay"
-    app_url: str = "http://localhost:8080"
+    app_url: str = "http://localhost:1414"
     debug: bool = False
     log_level: str = "INFO"
     llm_temperature: float = 0.1

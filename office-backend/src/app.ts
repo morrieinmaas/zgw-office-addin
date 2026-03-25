@@ -74,7 +74,7 @@ const httpService = new HttpService();
 const tokenService = new TokenService();
 const zaakService = new ZaakService(httpService, tokenService);
 const zaakController = new ZaakController(zaakService);
-const aiService = new AiService();
+const aiService = new AiService(httpService);
 const aiController = new AiController(aiService);
 
 // Health check endpoint for Kubernetes probes

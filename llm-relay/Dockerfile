@@ -29,9 +29,9 @@ ENV PATH="/app/.venv/bin:$PATH" \
 
 USER llmrelay
 
-EXPOSE 8080
+EXPOSE 1414
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=10s \
-    CMD ["/app/.venv/bin/python", "-c", "import httpx; httpx.get('http://localhost:8080/health').raise_for_status()"]
+    CMD ["/app/.venv/bin/python", "-c", "import httpx; httpx.get('http://localhost:1414/health').raise_for_status()"]
 
-CMD ["uvicorn", "llm_relay.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "llm_relay.main:app", "--host", "0.0.0.0", "--port", "1414"]

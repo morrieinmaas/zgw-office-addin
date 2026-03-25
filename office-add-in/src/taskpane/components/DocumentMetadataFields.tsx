@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: EUPL-1.2+
  */
 
-import type { FieldValues } from "react-hook-form";
-import React from "react";
+import type { FieldValues, Path } from "react-hook-form";
+import React, { useState } from "react";
 import { useWatch, useFormContext } from "react-hook-form";
 import { Button, makeStyles, tokens } from "@fluentui/react-components";
 import { Input } from "./form/Input";
@@ -17,6 +17,7 @@ import {
 } from "../../hooks/types";
 import { mq } from "./styles/layout";
 import { useGenerateMetaData } from "../../hooks/useGenerateMetaData";
+import { toNlAiError } from "../../utils/aiErrors";
 
 const useStyles = makeStyles({
   grid: {
@@ -48,8 +49,10 @@ export function DocumentMetadataFields<T extends FieldValues>({
   documentInfo,
 }: DocumentMetadataFieldsProps<T>) {
   const styles = useStyles();
-  const { setValue } = useFormContext();
+  const { setValue } = useFormContext<T>();
   const { mutateAsync: generateMetaData, isPending } = useGenerateMetaData();
+  const [aiError, setAiError] = useState<string | null>(null);
+
 
   // Watch the ZIO field to determine if vertrouwelijkheidsaanduiding dropdown should be enabled
   const selectedInformatieobjecttype = useWatch({
@@ -69,22 +72,31 @@ export function DocumentMetadataFields<T extends FieldValues>({
   }));
 
   const handleGenerateMetaData = async () => {
-    console.log("AI CALL!!");
+    setAiError(null);
     const response = await generateMetaData(documentInfo);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setValue(`${namePrefix}beschrijving` as any, response.data.beschrijving);
+    if (response.success && response.data) {
+      setValue(`${namePrefix}beschrijving` as Path<T>, response.data.beschrijving as never);
+    } else {
+      setAiError(toNlAiError(response.error));
+    }
   };
 
   return (
     <section className={styles.grid}>
-      <Button
-        className={`${styles.gridColumnSpan2}`}
-        appearance="primary"
-        disabled={isPending}
-        onClick={handleGenerateMetaData}
-      >
-        {isPending ? "Bezig met genereren..." : "Voorinvullen met AI"}
-      </Button>{" "}
+      <div className={styles.gridColumnSpan2}>
+        <Button
+          appearance="primary"
+          disabled={isPending}
+          onClick={handleGenerateMetaData}
+        >
+          {isPending ? "Bezig met genereren..." : "Voorinvullen met AI"}
+        </Button>
+        {aiError && (
+          <p style={{ color: tokens.colorPaletteRedForeground1, margin: 0, marginTop: tokens.spacingVerticalXS }}>
+            {aiError}
+          </p>
+        )}
+      </div>
       <Input
         className={styles.gridColumnSpan2}
         name={`${namePrefix}auteur`}

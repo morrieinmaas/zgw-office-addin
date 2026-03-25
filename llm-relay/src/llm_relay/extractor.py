@@ -41,6 +41,12 @@ EML_MIME_TYPES = frozenset(
     }
 )
 
+PDF_MIME_TYPES = frozenset(
+    {
+        "application/pdf",
+    }
+)
+
 
 def is_image(content_type: str | None) -> bool:
     return content_type is not None and content_type.lower() in IMAGE_MIME_TYPES
@@ -72,6 +78,8 @@ def extract_text(raw_b64: str, content_type: str | None) -> str:
         return _extract_xlsx(raw_bytes)
     elif ct in EML_MIME_TYPES:
         return _extract_eml(raw_bytes)
+    elif ct in PDF_MIME_TYPES:
+        return _extract_pdf(raw_bytes)
     else:
         # Default: try UTF-8 decode
         try:
@@ -117,6 +125,15 @@ def _extract_xlsx(data: bytes) -> str:
         return "\n".join(parts)
     finally:
         wb.close()
+
+
+def _extract_pdf(data: bytes) -> str:
+    """Extract text from a .pdf file."""
+    from pypdf import PdfReader
+
+    reader = PdfReader(io.BytesIO(data))
+    pages = [page.extract_text() for page in reader.pages]
+    return "\n".join(text for text in pages if text)
 
 
 def _extract_eml(data: bytes) -> str:

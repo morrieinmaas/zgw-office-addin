@@ -117,10 +117,9 @@ module.exports = async (env, options) => {
               // Replace the version with the package.json version during build
               const packageJson = require("./package.json");
               const version = packageJson.version || "0.0.0";
-              return content.toString().replace(
-                  /<Version>.*?<\/Version>/,
-                  `<Version>${version}</Version>`
-              );
+              return content
+                .toString()
+                .replace(/<Version>.*?<\/Version>/, `<Version>${version}</Version>`);
             },
           },
         ],

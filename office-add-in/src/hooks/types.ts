@@ -120,8 +120,10 @@ export type UseUploadStatusReturn = {
 };
 
 export type GenerateMetaDataResponse = {
-  succes: boolean;
+  success: boolean;
+  model_used: string | null;
+  error: string | null;
   data: {
     beschrijving: string;
-  };
+  } | null;
 };
