@@ -76,10 +76,22 @@ export function DocumentMetadataFields<T extends FieldValues>({
   const handleGenerateMetaData = async () => {
     setAiError(null);
     setAiModel(null);
-    const response = await generateMetaData(documentInfo);
+    const enrichedDocumentInfo = {
+      ...documentInfo,
+      informatieobjecttypenOptions: zaakinformatieobjecten.map((zio) => zio.omschrijving),
+    };
+    const response = await generateMetaData(enrichedDocumentInfo);
     if (response.success && response.data) {
       setValue(`${namePrefix}beschrijving` as Path<T>, response.data.beschrijving as never);
       setValue(`${namePrefix}taal` as Path<T>, response.data.taal as never);
+      if (response.data.informatieobjecttype) {
+        const match = zaakinformatieobjecten.find(
+          (zio) => zio.omschrijving === response.data!.informatieobjecttype
+        );
+        if (match?.url) {
+          setValue(`${namePrefix}informatieobjecttype` as Path<T>, match.url as never);
+        }
+      }
       setAiModel(response.model_used);
     } else {
       setAiError(toNlAiError(response.error));

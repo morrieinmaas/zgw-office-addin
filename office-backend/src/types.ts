@@ -4,11 +4,13 @@ export type DocumentInfo = {
   attachmentType?: string;
   inhoud?: string;
   attachmentOfficeId?: string;
+  informatieobjecttypenOptions?: string[];
 };
 
 export type LlmRelayData = {
   beschrijving: string;
   taal: string;
+  informatieobjecttype: string | null;
 };
 
 export type LlmRelayResponse = {

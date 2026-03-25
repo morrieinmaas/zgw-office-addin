@@ -100,6 +100,7 @@ export type DocumentInfo = {
   attachmentType?: string;
   inhoud?: string;
   attachmentOfficeId?: string;
+  informatieobjecttypenOptions?: string[];
 };
 
 export type DocumentMetadataFieldsProps<T extends FieldValues> = {
@@ -139,5 +140,6 @@ export type GenerateMetaDataResponse = {
   data: {
     beschrijving: string;
     taal: TaalCode;
+    informatieobjecttype: string | null;
   } | null;
 };
