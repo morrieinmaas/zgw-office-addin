@@ -13,6 +13,18 @@ export const documentstatus = [
   "gearchiveerd",
 ] as const;
 
+export const taalCodes = ["dut", "fre", "eng", "ger", "fry"] as const;
+
+export type TaalCode = (typeof taalCodes)[number];
+
+export const taalOptions: { label: string; value: TaalCode }[] = [
+  { label: "Nederlands", value: "dut" },
+  { label: "Frans", value: "fre" },
+  { label: "Engels", value: "eng" },
+  { label: "Duits", value: "ger" },
+  { label: "Fries", value: "fry" },
+];
+
 export const vertrouwelijkheidaanduiding = [
   "openbaar",
   "beperkt_openbaar",
@@ -36,6 +48,7 @@ export const addDocumentSchema = z.object({
   zaakidentificatie: z.string(),
   auteur: z.string().min(1),
   beschrijving: z.string().max(1000).optional(),
+  taal: z.enum(taalCodes),
 });
 
 export type AddDocumentSchema = z.infer<typeof addDocumentSchema>;
@@ -125,5 +138,6 @@ export type GenerateMetaDataResponse = {
   error: string | null;
   data: {
     beschrijving: string;
+    taal: TaalCode;
   } | null;
 };

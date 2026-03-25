@@ -219,6 +219,7 @@ export function useOutlookForm() {
             creatiedatum: new Date(),
             zaakidentificatie: zaak.data?.identificatie || "",
             auteur: "",
+            taal: "dut",
             attachment: file,
           }) satisfies DocumentSchema
       );

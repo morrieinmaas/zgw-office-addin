@@ -40,6 +40,7 @@ export const mockEmailDocument = {
   creatiedatum: new Date(),
   zaakidentificatie: "ZAAK-001",
   auteur: "vi-test",
+  taal: "dut" as const,
   selected: true as const,
   attachment: mockEmailAttachment,
 };
@@ -51,6 +52,7 @@ export const mockAttachmentDocument1 = {
   creatiedatum: new Date(),
   zaakidentificatie: "ZAAK-001",
   auteur: "vi-test",
+  taal: "dut" as const,
   selected: true as const,
   attachment: mockAttachment1,
 };
@@ -62,6 +64,7 @@ export const mockAttachmentDocument2 = {
   creatiedatum: new Date(),
   zaakidentificatie: "ZAAK-001",
   auteur: "vi-test",
+  taal: "dut" as const,
   selected: true as const,
   attachment: mockAttachment2,
 };

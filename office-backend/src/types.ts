@@ -8,6 +8,7 @@ export type DocumentInfo = {
 
 export type LlmRelayData = {
   beschrijving: string;
+  taal: string;
 };
 
 export type LlmRelayResponse = {

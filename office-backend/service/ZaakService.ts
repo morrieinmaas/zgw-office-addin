@@ -56,7 +56,6 @@ export class ZaakService {
         ...body,
         bronorganisatie: zaak.bronorganisatie,
         formaat: this.getFileFormat(String(body.titel)),
-        taal: "dut",
         bestandsnaam: body.titel,
         creatiedatum: new Date(String(body.creatiedatum)).toISOString().split("T").slice(0, 1)[0],
       }),

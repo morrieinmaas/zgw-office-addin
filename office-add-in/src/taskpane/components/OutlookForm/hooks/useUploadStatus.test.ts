@@ -50,6 +50,7 @@ const createMockDocument = (
       titel: `Document ${id}`,
       inhoud: "Test content",
       zaakidentificatie: "test-zaak-123",
+      taal: "dut" as const,
     } as DocumentSchema;
   }
 

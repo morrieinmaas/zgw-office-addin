@@ -100,6 +100,7 @@ export function OfficeForm() {
       auteur: "",
       creatiedatum: new Date(),
       status: documentstatus.slice(0, 1)[0]!,
+      taal: "dut" as const,
     },
   });
 

@@ -13,6 +13,7 @@ import { Select } from "./form/Select";
 import {
   addDocumentSchema,
   vertrouwelijkheidaanduiding,
+  taalOptions,
   DocumentMetadataFieldsProps,
 } from "../../hooks/types";
 import { mq } from "./styles/layout";
@@ -52,6 +53,7 @@ export function DocumentMetadataFields<T extends FieldValues>({
   const { setValue } = useFormContext<T>();
   const { mutateAsync: generateMetaData, isPending } = useGenerateMetaData();
   const [aiError, setAiError] = useState<string | null>(null);
+  const [aiModel, setAiModel] = useState<string | null>(null);
 
 
   // Watch the ZIO field to determine if vertrouwelijkheidsaanduiding dropdown should be enabled
@@ -73,9 +75,12 @@ export function DocumentMetadataFields<T extends FieldValues>({
 
   const handleGenerateMetaData = async () => {
     setAiError(null);
+    setAiModel(null);
     const response = await generateMetaData(documentInfo);
     if (response.success && response.data) {
       setValue(`${namePrefix}beschrijving` as Path<T>, response.data.beschrijving as never);
+      setValue(`${namePrefix}taal` as Path<T>, response.data.taal as never);
+      setAiModel(response.model_used);
     } else {
       setAiError(toNlAiError(response.error));
     }
@@ -91,6 +96,11 @@ export function DocumentMetadataFields<T extends FieldValues>({
         >
           {isPending ? "Bezig met genereren..." : "Voorinvullen met AI"}
         </Button>
+        {aiModel && (
+          <p style={{ color: tokens.colorNeutralForeground3, margin: 0, marginTop: tokens.spacingVerticalXS, fontSize: tokens.fontSizeBase200 }}>
+            {`Model used: ${aiModel}`}
+          </p>
+        )}
         {aiError && (
           <p style={{ color: tokens.colorPaletteRedForeground1, margin: 0, marginTop: tokens.spacingVerticalXS }}>
             {aiError}
@@ -108,6 +118,13 @@ export function DocumentMetadataFields<T extends FieldValues>({
         name={`${namePrefix}beschrijving`}
         label="Beschrijving"
         required={!addDocumentSchema.shape.beschrijving.isOptional()}
+      />
+      <Select
+        className={styles.gridColumnSpan1}
+        name={`${namePrefix}taal`}
+        label="Taal"
+        options={taalOptions}
+        required={!addDocumentSchema.shape.taal.isOptional()}
       />
       <Select
         className={styles.gridColumnSpan1}
