@@ -18,7 +18,7 @@ import {
 } from "../../hooks/types";
 import { mq } from "./styles/layout";
 import { useGenerateMetaData } from "../../hooks/useGenerateMetaData";
-import { toNlAiError } from "../../utils/aiErrors";
+import { translateResponseError } from "../../utils/aiErrors";
 
 const useStyles = makeStyles({
   grid: {
@@ -94,7 +94,7 @@ export function DocumentMetadataFields<T extends FieldValues>({
       }
       setAiModel(response.model_used);
     } else {
-      setAiError(toNlAiError(response.error));
+      setAiError(translateResponseError(response.error));
     }
   };
 

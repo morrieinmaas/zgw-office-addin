@@ -20,7 +20,7 @@ const AI_ERROR_MAP: Array<{ match: string; message: string }> = [
   { match: "OpenRouter API error", message: "De AI-service is tijdelijk niet beschikbaar." },
 ];
 
-export function toNlAiError(error: string | null): string {
+export function translateResponseError(error: string | null): string {
   if (!error) return AI_ERROR_FALLBACK;
   return AI_ERROR_MAP.find(({ match }) => error.includes(match))?.message ?? AI_ERROR_FALLBACK;
 }
